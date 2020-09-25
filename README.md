@@ -4,10 +4,56 @@
 
 This repository is intended to be used with the [demo-deployer](https://github.com/newrelic/demo-deployer). This will install Fluentd as a service on a given host.
 
-The deploy script path to install Fluentd on Linux should be `"deploy_script_path": "/deploy/linux/roles"`. At this time, linux CentOS and AWS Linux1 and Linux2 are supported.
+Here is an example for the `demo-deployer` deploy config to define a fluentd service to be installed on 2 hosts:
 
-In addition, the deploy config should contain an instrumentor definition for the fluentd service using the with the [demo-newrelic-instrumentation](https://github.com/newrelic/demo-newrelic-instrumentation) repository. Please see the documentation on this repository for the proper deploy script path location.
+```json
+{
 
+  "services": [
+    {
+      "id": "fluentd",
+      "destinations": ["Host1","Host2"],
+      "source_repository": "https://github.com/newrelic/demo-fluentd.git",
+      "deploy_script_path": "deploy/linux/roles",
+      "port": 9999
+    }
+  ]
+
+}
+```
+
+In addition, the deploy config should contain an instrumentor definition for the fluentd service using the with the [demo-newrelic-instrumentation](https://github.com/newrelic/demo-newrelic-instrumentation) repository. 
+
+Here is an example of newrelic instrumentation to get the logs for 2 services.
+
+```json
+{
+
+  "instrumentations": {
+    "services": [
+      {
+        "id": "nr_logging",
+        "service_ids": ["service1"],
+        "provider": "newrelic",
+        "source_repository": "https://github.com/newrelic/demo-newrelic-instrumentation.git",
+        "deploy_script_path": "deploy/logging/roles"
+      },
+      {
+        "id": "nr_logging_in_context",
+        "service_ids": ["service2"],
+        "provider": "newrelic",
+        "source_repository": "https://github.com/newrelic/demo-newrelic-instrumentation.git",
+        "deploy_script_path": "deploy/logging_in_context/roles"
+      }
+    ]
+  }
+
+}
+```
+
+## Requirements
+
+At this time, linux CentOS and AWS Linux1 and Linux2 are supported.
 
 ## Contributing
 We encourage your contributions to improve [project name]! Keep in mind when you submit your pull request, you'll need to sign the CLA via the click-through using CLA-Assistant. You only have to sign the CLA one time per project.
