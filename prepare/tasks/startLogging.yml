@@ -1,0 +1,7 @@
+---
+
+- name: Start td-agent
+  shell: '/etc/init.d/td-agent restart'
+  become: yes
+
+

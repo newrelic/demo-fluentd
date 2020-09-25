@@ -1,0 +1,5 @@
+---
+
+- name: Install New Relic plugin
+  shell: "td-agent-gem install fluent-plugin-newrelic"
+  become: yes

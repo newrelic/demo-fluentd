@@ -1,0 +1,17 @@
+---
+
+- name: Touch and allow td-agent access to /var/log/secure file
+  file:
+    path: /var/log/secure
+    mode: g=rw
+    group: td-agent
+    state: touch
+  become: yes
+
+- name: Touch and allow td-agent access to secure.log.pos file
+  file:
+    path: /var/log/secure.log.pos
+    mode: g=rw
+    group: td-agent
+    state: touch
+  become: yes

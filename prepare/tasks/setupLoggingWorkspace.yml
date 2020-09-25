@@ -1,0 +1,22 @@
+---
+
+- name: Setup Logging Workspace
+  block:
+
+  - name: Uninstall existing NTP service
+    yum:
+      name: ntp*
+      state: absent
+
+  - name: Install chrony package
+    yum:
+      name: chrony
+      state: present
+
+  - name: Configure chronyd to start at boot
+    shell: 'chkconfig chronyd on'
+
+  - name: Start chrony daemon(chronyd)
+    shell: 'service chronyd start'
+  
+  become: yes

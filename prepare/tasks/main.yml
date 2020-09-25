@@ -1,0 +1,10 @@
+---
+- debug:
+      msg: Installing New Relic Logging
+
+- block:
+    - include_tasks: setupLoggingWorkspace.yml
+    - include_tasks: installFluentD.yml
+    - include_tasks: installNRPlugin.yml
+    - include_tasks: setupLogsToCapture.yml
+    - include_tasks: startLogging.yml

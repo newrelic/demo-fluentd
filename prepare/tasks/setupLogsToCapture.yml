@@ -1,0 +1,5 @@
+---
+
+- include_tasks: messagesLog.yml
+- include_tasks: secureLog.yml
+#- include_tasks: supervisordLog.yml

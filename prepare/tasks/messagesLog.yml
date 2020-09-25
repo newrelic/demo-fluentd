@@ -1,0 +1,14 @@
+---
+
+- name: Set permissions for /var/log/messages 
+  file:
+    path: /var/log/messages
+    mode: u=rw,g=r,o=r 
+  become: yes
+
+- name: Create messages.log.pos file
+  file:
+    path: /var/log/messages.log.pos
+    mode: u=rw,g=rw,o=rw  
+    state: touch
+  become: yes   

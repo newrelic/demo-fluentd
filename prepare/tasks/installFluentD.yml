@@ -1,0 +1,44 @@
+---
+
+- name: check centos version
+  shell: cat /etc/os-release | grep "CentOS" | wc -l
+  register: centos
+
+- name: check linux2 version
+  shell: cat /etc/os-release | grep "Linux 2" | wc -l
+  register: linux2
+
+- name: Install Fluentd CentOS
+  shell: "curl -L https://toolbelt.treasuredata.com/sh/install-redhat-td-agent3.sh | sh"
+  become: yes
+  when: centos.stdout|int > 0
+
+- name: Install Fluentd Linux2
+  shell: "curl -L https://toolbelt.treasuredata.com/sh/install-amazon2-td-agent3.sh | sh"
+  become: yes
+  when: linux2.stdout|int > 0
+
+- name: Otherwise default to install Fluentd Linux1
+  shell: "curl -L https://toolbelt.treasuredata.com/sh/install-amazon1-td-agent3.sh | sh"
+  become: yes
+  when: linux2.stdout|int == 0 and centos.stdout|int == 0
+
+- name: Start Fluentd as root user so it can access logs file anywhere on host
+  replace:
+    path: /etc/init.d/td-agent
+    regexp: 'TD_AGENT_USER=td-agent'
+    replace: 'TD_AGENT_USER=root'
+  become: yes
+
+- name: Copy td-agent.conf to remote
+  template:
+    src: td-agent.conf
+    dest: /etc/td-agent/td-agent.conf
+  become: yes
+
+- name: Grant permissions for logg access
+  file:
+    path: /home/{{ ansible_user }}
+    state: touch
+    mode: +x
+  become: true
